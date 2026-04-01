@@ -82,6 +82,30 @@ Check PVC status:
 kubectl get pvc -n mongo
 ```
 
+### Troubleshooting
+
+If Mongo Express cannot connect to MongoDB:
+
+1. Check MongoDB pod logs:
+```bash
+kubectl logs -n mongo deployment/mongodb-deployment
+```
+
+2. Check Mongo Express pod logs:
+```bash
+kubectl logs -n mongo deployment/mongo-express-deployment
+```
+
+3. Verify MongoDB service is accessible:
+```bash
+kubectl exec -n mongo deployment/mongo-express-deployment -- ping mongodb-service
+```
+
+4. Test MongoDB connection from within the cluster:
+```bash
+kubectl run -it --rm debug --image=mongo:latest --restart=Never -n mongo -- mongosh "mongodb://admin:password123@mongodb-service:27017"
+```
+
 ## Access Mongo Express
 
 ### Using LoadBalancer (if supported):
